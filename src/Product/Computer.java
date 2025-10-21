@@ -7,8 +7,10 @@ public class Computer extends Product {
     private String processor;
     private int ram;
 
-    public Computer(int id, String name, double price, int availableQuantity) {
+    public Computer(int id, String name, double price, int availableQuantity,String processor,int ram) {
         super(id, name, price, availableQuantity);
+        this.processor = processor;
+        this.ram = ram;
     }
 
     @Override

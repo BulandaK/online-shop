@@ -1,15 +1,17 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import Manager.ProductManager;
+import Product.Computer;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        ProductManager manager = new ProductManager();
+        Computer myComp = new Computer(1,"lenovo",2.4,5,"i5",32);
+        manager.addToInventory(myComp);
+        manager.showInventory();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        Computer updatedComp = new Computer(1,"msi",5,6,"i5",16);
+
+        manager.updateProduct(1,updatedComp);
+        manager.showInventory();
+
     }
 }
