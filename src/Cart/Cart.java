@@ -21,6 +21,7 @@ public class Cart {
     }
 
     public void showCart(){
+        System.out.println("koszyk uzytkownika:");
         for (Product product : userCart) {
             System.out.println(product);
         }
@@ -30,5 +31,12 @@ public class Cart {
         System.out.println("skladam zamowienie");
     }
 
-
+    public double sumPrices(){
+        return userCart.stream()
+                .mapToDouble(product -> product.getPrice())
+                .sum();
+    }
+    public List<Product> getUserCart() {
+        return userCart;
+    }
 }

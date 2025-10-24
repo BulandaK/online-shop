@@ -2,26 +2,27 @@ import Cart.Cart;
 import Manager.ProductManager;
 import Product.Computer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         ProductManager manager = new ProductManager();
-        Computer myComp = new Computer(1,"lenovo",2.4,5,"i5",32);
-        manager.addToInventory(myComp);
-        manager.showInventory();
+        List<Computer> computersList = new ArrayList<>();
 
-        Computer updatedComp = new Computer(1,"msi",5,6,"i5",16);
+        Cart userCart = new Cart();
 
-        manager.updateProduct(1,updatedComp);
-        manager.showInventory();
 
-//        Cart userCart = new Cart();
-//        userCart.addToCart(updatedComp);
-//        System.out.println("koszyk zakupowy po dodaniu");
-//        userCart.showCart();
-//
-//        userCart.removeFromCart(1);
-//        System.out.println("koszyk zakupowy po usunieciu");
-//        userCart.showCart();
+        for (int i = 0; i < 10; i++) {
+            Computer computer =Computer.createRandomComputer(i);
+            manager.addToInventory(computer);
+            userCart.addToCart(computer);
+//            computersList.add(Computer.createRandomComputer(i));
+        }
+
+        userCart.showCart();
+        System.out.println(userCart.sumPrices());
 
     }
+
 }
