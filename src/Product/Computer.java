@@ -1,11 +1,16 @@
 package Product;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Computer extends Product {
     private String processor;
     private int ram;
+
+    private static final String[] BRANDS = {"Lenovo", "MSI", "Asus", "Acer", "Dell"};
+    private static final String[] CPUs = {"i5", "i7", "i9"};
+    private static final Random random = new Random();
 
     public Computer(int id, String name, double price, int availableQuantity,String processor,int ram) {
         super(id, name, price, availableQuantity);
@@ -32,6 +37,10 @@ public class Computer extends Product {
         return "Computer{" +
                 "procesor='" + processor + '\'' +
                 ", ram=" + ram +
+                ", id=" + getId() +
+                ", name=" + getName() +
+                ", price=" + getPrice() +
+                ", availableQuantity=" + getAvailableQuantity() +
                 '}';
     }
 
@@ -39,7 +48,7 @@ public class Computer extends Product {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Computer computer = (Computer) o;
-        return ram == computer.ram && Objects.equals(processor, computer.processor);
+        return getId() == computer.getId();
     }
 
     @Override
@@ -47,5 +56,13 @@ public class Computer extends Product {
         return Objects.hash(processor, ram);
     }
 
+    public static Computer createRandomComputer(int id) {
+        String brand = BRANDS[random.nextInt(BRANDS.length)];
+        double price = 500 + random.nextInt(1500);
+        int quantity = 1 + random.nextInt(10);
+        String cpu = CPUs[random.nextInt(CPUs.length)];
+        int ram = 8 * (1 + random.nextInt(4));
 
+        return new Computer(id, brand, price, quantity, cpu, ram);
+    }
 }
