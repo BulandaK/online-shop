@@ -1,4 +1,4 @@
-package Manager;
+package Cart;
 
 import Product.Product;
 
@@ -19,5 +19,16 @@ public class Cart {
     public void removeFromCart(int id){
         userCart.removeIf(p->p.getId()==id);
     }
+
+    public void showCart(){
+        for (Product product : userCart) {
+            System.out.println(product);
+        }
+    }
+
+    public void makeOrder(){
+        System.out.println("skladam zamowienie");
+    }
+
 
 }

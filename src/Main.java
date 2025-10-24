@@ -1,3 +1,4 @@
+import Cart.Cart;
 import Manager.ProductManager;
 import Product.Computer;
 
@@ -12,6 +13,15 @@ public class Main {
 
         manager.updateProduct(1,updatedComp);
         manager.showInventory();
+
+//        Cart userCart = new Cart();
+//        userCart.addToCart(updatedComp);
+//        System.out.println("koszyk zakupowy po dodaniu");
+//        userCart.showCart();
+//
+//        userCart.removeFromCart(1);
+//        System.out.println("koszyk zakupowy po usunieciu");
+//        userCart.showCart();
 
     }
 }
