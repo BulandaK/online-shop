@@ -44,8 +44,8 @@ public class Smartphone extends Product {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Smartphone that = (Smartphone) o;
-        return bateryCapacity == that.bateryCapacity && Objects.equals(color, that.color);
+        Smartphone smartphone = (Smartphone) o;
+        return getId() ==smartphone.getId();
     }
 
     @Override
