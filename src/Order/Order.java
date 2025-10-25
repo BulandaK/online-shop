@@ -13,5 +13,15 @@ public class Order {
         this.orderSum = cart.sumPrices();
     }
 
+    public Client getClient(){
+        return client;
+    }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public double getOrderSum() {
+        return orderSum;
+    }
 }
