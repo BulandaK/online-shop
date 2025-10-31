@@ -1,5 +1,6 @@
 package Cart;
 
+import Order.*;
 import Product.Product;
 
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ public class Cart {
         }
     }
 
-    public void makeOrder(){
-        System.out.println("skladam zamowienie");
+    public Order makeOrder(Client client){
+        return new Order(client, this);
     }
 
     public double sumPrices(){
