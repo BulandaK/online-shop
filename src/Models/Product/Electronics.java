@@ -1,0 +1,10 @@
+package Models.Product;
+
+import java.math.BigDecimal;
+
+public class Electronics extends Product{
+    public Electronics(Long id, String name, BigDecimal price, int availableQuantity) {
+        super(id, name, price, availableQuantity);
+    }
+
+}

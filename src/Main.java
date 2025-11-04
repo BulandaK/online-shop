@@ -1,38 +1,35 @@
-import Cart.Cart;
+import Console.ConsoleMenu;
+import Manager.OrderManager;
 import Manager.ProductManager;
-import Order.Invoice;
-import Order.Order;
-import Order.OrderProcessor;
-import Order.Client;
-import Product.Computer;
+import Models.Cart.Cart;
+import Models.Order.Client;
+import Models.Order.Order;
+import Models.Product.Computer;
+import Models.Product.Smartphone;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 public class Main {
     public static void main(String[] args) {
-        ProductManager manager = new ProductManager();
 
-        Client kamil = new Client("Kamil","Bulanda",1);
-        Cart kamilCart = new Cart();
-
-
-        for (int i = 0; i < 10; i++) {
-            Computer computer =Computer.createRandomComputer(i);
-            manager.addToInventory(computer);
-            kamilCart.addToCart(computer);
-        }
-
-        kamilCart.showCart();
+        ProductManager productManager = new ProductManager();
+        OrderManager orderManager = new OrderManager(productManager);
 
 
-        Order kamilOrder = kamilCart.makeOrder(kamil);
+        Client kamilClient = new Client("Kamil","Nowak",1);
+        Cart kamilCart = new Cart(productManager);
+        Order kamilOrder = new Order(kamilClient,kamilCart);
 
-        OrderProcessor myOrderProcessor = new OrderProcessor();
-        Invoice invoiceForKamilOrder = myOrderProcessor.processOrder(kamilOrder);
 
-        invoiceForKamilOrder.showInvoice();
+        Computer kamilComputer = new Computer(1L,"Kamil Computer",new BigDecimal(2200),5,"i5",32);
+        Smartphone randomSmartphone = new Smartphone(2L,"iphone",new BigDecimal(1500),5,"black",3000);
 
+        productManager.addToInventory(kamilComputer);
+        productManager.addToInventory(randomSmartphone);
+
+
+        ConsoleMenu consoleMenu = new ConsoleMenu(orderManager,kamilOrder);
+        consoleMenu.run();
     }
 
 }

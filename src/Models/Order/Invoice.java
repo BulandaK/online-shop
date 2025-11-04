@@ -1,7 +1,8 @@
-package Order;
+package Models.Order;
 
-import Cart.Cart;
+import Models.Cart.Cart;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Invoice {
@@ -19,16 +20,16 @@ public class Invoice {
         this.vatRate = vatRate;
     }
 
-    public double getNetAmount() {
+    public BigDecimal getNetAmount() {
         return cart.sumPrices();
     }
 
     public double getVatAmount() {
-        return getNetAmount() * vatRate;
+        return getNetAmount().doubleValue() * vatRate;
     }
 
     public double getGrossAmount() {
-        return getNetAmount() + getVatAmount();
+        return getNetAmount().doubleValue() + getVatAmount();
     }
 
     public void showInvoice() {

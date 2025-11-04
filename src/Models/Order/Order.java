@@ -1,19 +1,21 @@
-package Order;
+package Models.Order;
 
-import Cart.Cart;
+import Models.Cart.Cart;
+
+import java.math.BigDecimal;
 
 public class Order {
     private Client client;
     private Cart cart;
-    private double orderSum;
+    private BigDecimal orderPrice;
 
     public Order(Client client, Cart cart) {
         this.client = client;
         this.cart = cart;
-        this.orderSum = cart.sumPrices();
+        this.orderPrice = cart.sumPrices();
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return client;
     }
 
@@ -21,7 +23,7 @@ public class Order {
         return cart;
     }
 
-    public double getOrderSum() {
-        return orderSum;
+    public BigDecimal getOrderPrice() {
+        return orderPrice;
     }
 }

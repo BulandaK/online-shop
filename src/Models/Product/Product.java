@@ -1,23 +1,25 @@
-package Product;
+package Models.Product;
+
+import java.math.BigDecimal;
 
 public abstract class Product {
-    private int id;
+    private Long id;
     private String name;
-    private double price;
+    private BigDecimal price;
     private int availableQuantity;
 
-    public Product(int id, String name, double price, int availableQuantity) {
+    public Product(Long id, String name, BigDecimal price, int availableQuantity) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.availableQuantity = availableQuantity;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -29,11 +31,11 @@ public abstract class Product {
         this.name = name;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -45,7 +47,6 @@ public abstract class Product {
         this.availableQuantity = availableQuantity;
     }
 
-    public abstract void configure();
 
     @Override
     public String toString() {

@@ -1,6 +1,6 @@
 package Manager;
 
-import Product.Product;
+import Models.Product.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +9,20 @@ import java.util.Optional;
 public class ProductManager {
     private final List<Product> inventory;
 
-    public ProductManager(){
+    public ProductManager() {
         inventory = new ArrayList<Product>();
     }
+
+    public Optional<Product> getProductById(Long id){
+        return inventory.stream().filter(product -> product.getId()==id).findFirst();
+    }
+
     public void addToInventory(Product product) {
         inventory.add(product);
     }
 
-    public void removeFromInventory(int id) {
-        inventory.removeIf(p -> p.getId() == id);
+    public void removeFromInventory(Long id) {
+        inventory.removeIf(p -> p.getId().equals(id));
     }
 
     public void showInventory() {
@@ -27,13 +32,12 @@ public class ProductManager {
     }
 
     public void updateProduct(int id, Product updatedProduct) {
-        Optional<Product> searchedProduct =inventory.stream().filter(p->p.getId()==id).findFirst();
+        Optional<Product> searchedProduct = inventory.stream().filter(p -> p.getId() == id).findFirst();
 
-        if(searchedProduct.isPresent()){
-            removeFromInventory(searchedProduct.get().getId());
-            addToInventory(updatedProduct);
-        }else {
+        if (searchedProduct.isEmpty()) {
             System.out.println("nie ma wybranego produktu");
         }
+        removeFromInventory(searchedProduct.get().getId());
+        addToInventory(updatedProduct);
     }
 }

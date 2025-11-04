@@ -1,14 +1,16 @@
-package Product;
+package Models.Product;
 
+import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class Smartphone extends Product {
     private String color;
     private int bateryCapacity;
 
-    public Smartphone(int id, String name, double price, int availableQuantity) {
+    public Smartphone(Long id, String name, BigDecimal price, int availableQuantity,String color,int bateryCapacity) {
         super(id, name, price, availableQuantity);
+        this.color = color;
+        this.bateryCapacity = bateryCapacity;
     }
 
     public String getColor() {
@@ -27,36 +29,24 @@ public class Smartphone extends Product {
         this.bateryCapacity = bateryCapacity;
     }
 
-    @Override
-    public void configure() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Wybierz kolor (czarny / biały / niebieski): ");
-        color = scanner.nextLine();
-
-        System.out.print("Wybierz pojemność baterii (3000 / 4000 / 5000 mAh): ");
-        bateryCapacity = scanner.nextInt();
-
-
-        System.out.println("Skonfigurowano smartfon: kolor " + color + ", " + bateryCapacity);
-    }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Smartphone smartphone = (Smartphone) o;
-        return getId() ==smartphone.getId();
+        return getId() == smartphone.getId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(color, bateryCapacity);
+        return Objects.hash(this.getId());
     }
 
     @Override
     public String toString() {
         return "Smartphone{" +
-                "color='" + color + '\'' +
+                "id="+ getId() +
+                ", color='" + color +
                 ", bateryCapacity=" + bateryCapacity +
                 '}';
     }
