@@ -4,9 +4,6 @@ import Models.Cart.Cart;
 import Models.Order.Invoice;
 import Models.Order.Order;
 import Models.Product.Product;
-
-import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class OrderManager {
@@ -14,8 +11,8 @@ public class OrderManager {
     private final ProductManager productManager;
     private final Scanner scanner = new Scanner(System.in);
 
-    public OrderManager(ProductManager productManager) {
-        this.productManager = productManager;
+    public OrderManager() {
+        this.productManager = State.GlobalState.getProductManager();
     }
 
     public void showProducts() {

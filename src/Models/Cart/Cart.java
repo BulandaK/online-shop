@@ -14,9 +14,9 @@ public class Cart {
     private final List<Product> products;
     private final ProductManager productManager;
 
-    public Cart(ProductManager productManager) {
+    public Cart() {
         products = new ArrayList<Product>();
-        this.productManager = productManager;
+        productManager = State.GlobalState.getProductManager();
     }
 
     public void addToCart(Long id) {

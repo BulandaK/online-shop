@@ -73,6 +73,10 @@ public class Product {
         }
     }
 
+    public ProductConfiguration makeProductAsConfiguration(Long id){
+        return new ProductConfiguration(id,this.name,this.price,this);
+    }
+
     @Override
     public String toString() {
         return "Product{" +
