@@ -12,14 +12,15 @@ public class ConsoleMenu {
     private final OrderManager orderManager;
     private final Order order;
 
-    public ConsoleMenu(OrderManager om, Order order) {
-        this.orderManager = om;
+    public ConsoleMenu(OrderManager orderManager, Order order) {
+        this.orderManager = orderManager;
         this.order = order;
     }
 
     public void run() {
-        OrderOptions option;
+        helloUser();
 
+        OrderOptions option;
         do {
             showOptions();
             option = getOptionFromUser();
@@ -58,6 +59,11 @@ public class ConsoleMenu {
 
             System.out.println("Niepoprawny wybór, spróbuj ponownie.");
         }
+    }
+
+    private void helloUser() {
+        System.out.println("witaj uzytkowniku: " + this.order.getClient().getName());
+
     }
 
 }

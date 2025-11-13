@@ -13,8 +13,8 @@ public class ProductManager {
         inventory = new ArrayList<Product>();
     }
 
-    public Optional<Product> getProductById(Long id){
-        return inventory.stream().filter(product -> product.getId()==id).findFirst();
+    public Optional<Product> getProductById(Long id) {
+        return inventory.stream().filter(product -> product.getId() == id).findFirst();
     }
 
     public void addToInventory(Product product) {
@@ -22,17 +22,17 @@ public class ProductManager {
     }
 
     public void removeFromInventory(Long id) {
-        inventory.removeIf(p -> p.getId().equals(id));
+        inventory.removeIf(product -> product.getId().equals(id));
     }
 
     public void showInventory() {
-        for (Product prod : inventory) {
-            System.out.println(prod);
+        for (Product product : inventory) {
+            System.out.println(product);
         }
     }
 
     public void updateProduct(int id, Product updatedProduct) {
-        Optional<Product> searchedProduct = inventory.stream().filter(p -> p.getId() == id).findFirst();
+        Optional<Product> searchedProduct = inventory.stream().filter(product -> product.getId() == id).findFirst();
 
         if (searchedProduct.isEmpty()) {
             System.out.println("nie ma wybranego produktu");

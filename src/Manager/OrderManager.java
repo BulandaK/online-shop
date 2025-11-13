@@ -37,11 +37,12 @@ public class OrderManager {
             System.out.println("usuneles z koszyka product: " + removedProduct);
             order.getCart().showCart();
         }
-        
+
     }
 
     public void makeOrder(Order order) {
         System.out.println("robie order");
+
 
         Invoice invoice = new Invoice(
                 "FV/" + Math.random(),
@@ -55,9 +56,10 @@ public class OrderManager {
     }
 
     private Long getIdFromUser(String message) {
+        System.out.println(message);
+
         Long id = scanner.nextLong();
         scanner.nextLine();
-        System.out.println(message);
         return id;
     }
 }
