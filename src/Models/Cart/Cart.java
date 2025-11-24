@@ -19,14 +19,16 @@ public class Cart {
         productManager = State.GlobalState.getProductManager();
     }
 
-    public void addToCart(Long id) {
+    public void add(Long id) {
 
         Optional<Product> productToAdd = productManager.getProductById(id);
 
         productToAdd.ifPresentOrElse(
-                prod -> {
-                    if (prod.getAvailableQuantity() > 0) {
-                        products.add(prod);
+                product -> {
+                    if (product.getAvailableQuantity() > 0) {
+                        products.add(product);
+                    } else {
+                        throw new MyException.InsufficientStockException("Brak dostępnych sztuk dla produktu id=" + id);
                     }
                 },
                 () -> System.out.println("Nie mozna dodac do koszyka, taki produkt nie istnieje")
@@ -34,7 +36,7 @@ public class Cart {
 
     }
 
-    public Product removeFromCart(Long id) {
+    public Product remove(Long id) {
         Product removed = products.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst()
@@ -48,7 +50,7 @@ public class Cart {
         return removed;
     }
 
-    public void showCart() {
+    public void show() {
         System.out.println("koszyk uzytkownika:");
         for (Product product : products) {
             System.out.println(product);
@@ -63,6 +65,17 @@ public class Cart {
         return products.stream()
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void finalizeCart() {
+        products.forEach(product -> {
+            product.setAvailableQuantity(product.getAvailableQuantity() - 1);
+        });
+        products.clear();
+    }
+
+    public boolean isEmpty(){
+        return products.isEmpty();
     }
 
     public List<Product> getProducts() {

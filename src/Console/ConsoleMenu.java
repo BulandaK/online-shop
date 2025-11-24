@@ -29,7 +29,7 @@ public class ConsoleMenu {
                 case SHOW_PRODUCTS -> orderManager.showProducts();
                 case ADD_TO_CART -> orderManager.addToCart(order);
                 case REMOVE_FROM_CART -> orderManager.removeFromCart(order);
-                case MAKE_ORDER -> orderManager.makeOrder(order);
+                case MAKE_ORDER -> orderManager.executeOrder(order);
                 case EXIT -> System.out.println("Wyjście z programu");
             }
 

@@ -1,6 +1,8 @@
 package Manager;
 
 import Models.Product.Product;
+import MyException.DuplicateProductException;
+import MyException.ProductNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +16,15 @@ public class ProductManager {
     }
 
     public Optional<Product> getProductById(Long id) {
-        return inventory.stream().filter(product -> product.getId() == id).findFirst();
+        return inventory.stream()
+                .filter(product -> product.getId().equals(id))
+                .findFirst();
     }
 
-    public void addToInventory(Product product) {
+    public void addToInventory(Product product) throws DuplicateProductException {
+        if (getProductById(product.getId()).isPresent()) {
+            throw new DuplicateProductException("Produkt o id=" + product.getId() + " już istnieje");
+        }
         inventory.add(product);
     }
 
@@ -31,11 +38,11 @@ public class ProductManager {
         }
     }
 
-    public void updateProduct(int id, Product updatedProduct) {
-        Optional<Product> searchedProduct = inventory.stream().filter(product -> product.getId() == id).findFirst();
+    public void updateProduct(Long id, Product updatedProduct) throws ProductNotFoundException {
+        Optional<Product> searchedProduct = getProductById(id);
 
         if (searchedProduct.isEmpty()) {
-            System.out.println("nie ma wybranego produktu");
+            throw new ProductNotFoundException("Nie ma produktu, który chcesz updatowac");
         }
         removeFromInventory(searchedProduct.get().getId());
         addToInventory(updatedProduct);

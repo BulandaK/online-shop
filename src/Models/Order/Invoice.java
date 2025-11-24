@@ -3,18 +3,18 @@ package Models.Order;
 import Models.Cart.Cart;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Invoice {
     private String number;
-    private LocalDate issueDate;
+    private LocalDateTime issueDate;
     private Client client;
     private Cart cart;
     private double vatRate;
 
     public Invoice(String number, Client client, Cart cart, double vatRate) {
         this.number = number;
-        this.issueDate = LocalDate.now();
+        this.issueDate = LocalDateTime.now();
         this.client = client;
         this.cart = cart;
         this.vatRate = vatRate;
@@ -38,7 +38,7 @@ public class Invoice {
         System.out.println("Date: " + issueDate);
         System.out.println("Customer: " + client);
         System.out.println("-----------------------------------");
-        cart.showCart();
+        cart.show();
         System.out.println("-----------------------------------");
         System.out.println("Net amount: " + getNetAmount());
         System.out.println("VAT (" + (vatRate * 100) + "%): " + getVatAmount());

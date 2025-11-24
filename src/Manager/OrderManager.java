@@ -1,9 +1,7 @@
 package Manager;
 
-import Models.Cart.Cart;
-import Models.Order.Invoice;
 import Models.Order.Order;
-import Models.Product.Product;
+
 import java.util.Scanner;
 
 public class OrderManager {
@@ -20,41 +18,41 @@ public class OrderManager {
     }
 
     public void addToCart(Order order) {
-        Long id = getIdFromUser("\n\nwybierz id produktu ktory chcesz dodac do koszyka");
+        try{
+            Long id = getIdFromUser("\n\nwybierz id produktu ktory chcesz dodac do koszyka");
 
-        order.getCart().addToCart(id);
-        order.getCart().showCart();
-    }
-
-    public void removeFromCart(Order order) {
-        Long id = getIdFromUser("\n\nwybierz id produktu ktory chcesz usunac z koszyka");
-
-        Product removedProduct = order.getCart().removeFromCart(id);
-        if (removedProduct != null) {
-            System.out.println("usuneles z koszyka product: " + removedProduct);
-            order.getCart().showCart();
+            order.getCart().add(id);
+            order.getCart().show();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
     }
 
-    public void makeOrder(Order order) {
-        System.out.println("robie order");
+    public void removeFromCart(Order order) {
+        try {
+            Long id = getIdFromUser("\n\nwybierz id produktu ktory chcesz usunac z koszyka");
+            order.removeFromCart(id);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
 
-        Invoice invoice = new Invoice(
-                "FV/" + Math.random(),
-                order.getClient(),
-                order.getCart(),
-                0.23
-        );
-
-        System.out.println("Faktura wygenerowana! ");
-        invoice.showInvoice();
     }
 
+    public void executeOrder(Order order) {
+        try {
+            order.makeOrder();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private boolean isEmptyCart(Order order){
+        return order.getCart().isEmpty();
+    }
     private Long getIdFromUser(String message) {
         System.out.println(message);
-
         Long id = scanner.nextLong();
         scanner.nextLine();
         return id;
