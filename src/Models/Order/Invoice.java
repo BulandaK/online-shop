@@ -1,7 +1,6 @@
 package Models.Order;
 
 import Models.Cart.Cart;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -30,6 +29,26 @@ public class Invoice {
 
     public double getGrossAmount() {
         return getNetAmount().doubleValue() + getVatAmount();
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public LocalDateTime getIssueDate() {
+        return issueDate;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public double getVatRate() {
+        return vatRate;
     }
 
     public void showInvoice() {

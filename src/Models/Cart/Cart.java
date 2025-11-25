@@ -21,8 +21,8 @@ public class Cart {
 
     public void add(Long id) {
 
-        Optional<Product> productToAdd = productManager.getProductById(id);
-
+            Optional<Product> productToAdd = productManager.getProductById(id);
+        
         productToAdd.ifPresentOrElse(
                 product -> {
                     if (product.getAvailableQuantity() > 0) {
@@ -38,7 +38,7 @@ public class Cart {
 
     public Product remove(Long id) {
         Product removed = products.stream()
-                .filter(p -> p.getId().equals(id))
+                .filter(product -> product.getId().equals(id))
                 .findFirst()
                 .orElse(null);
 

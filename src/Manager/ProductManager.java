@@ -21,6 +21,8 @@ public class ProductManager {
                 .findFirst();
     }
 
+
+
     public void addToInventory(Product product) throws DuplicateProductException {
         if (getProductById(product.getId()).isPresent()) {
             throw new DuplicateProductException("Produkt o id=" + product.getId() + " już istnieje");

@@ -58,6 +58,10 @@ public class Product {
         this.availableQuantity = availableQuantity;
     }
 
+    public boolean isAvailable(){
+        return this.availableQuantity > 0;
+    }
+
     public List<ProductConfiguration> getConfigurations() {
         return configurations;
     }
@@ -72,6 +76,8 @@ public class Product {
             configurations.forEach(configuration -> System.out.println("\t" + configuration.getProduct()));
         }
     }
+
+
 
     public ProductConfiguration makeProductAsConfiguration(Long id){
         return new ProductConfiguration(id,this.name,this.price,this);
