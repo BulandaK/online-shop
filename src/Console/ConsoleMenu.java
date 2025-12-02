@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class ConsoleMenu {
 
-
     private final OrderManager orderManager;
     private final Order order;
 
@@ -37,12 +36,11 @@ public class ConsoleMenu {
     }
 
     private void showOptions() {
-        System.out.println("\nWybierz jedną z opcji:");
-        System.out.println("1 - Wyświetl produkty");
-        System.out.println("2 - Dodaj do koszyka");
-        System.out.println("3 - Usuń z koszyka");
-        System.out.println("4 - Złóż zamówienie");
-        System.out.println("5 - Wyjście");
+        int optionNumber = 1;
+        for (OrderOptions option : OrderOptions.values()) {
+            System.out.println(optionNumber + " - " + option.getDescription());
+            optionNumber++;
+        }
     }
 
     private OrderOptions getOptionFromUser() {

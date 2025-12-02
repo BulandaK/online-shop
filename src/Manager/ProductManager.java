@@ -22,7 +22,6 @@ public class ProductManager {
     }
 
 
-
     public void addToInventory(Product product) throws DuplicateProductException {
         if (getProductById(product.getId()).isPresent()) {
             throw new DuplicateProductException("Produkt o id=" + product.getId() + " już istnieje");
@@ -35,18 +34,20 @@ public class ProductManager {
     }
 
     public void showInventory() {
-        for (Product product : inventory) {
-            System.out.println(product);
-        }
+        inventory.forEach(System.out::println);
     }
 
-    public void updateProduct(Long id, Product updatedProduct) throws ProductNotFoundException {
+    public void toUpdate(Long id, Product updatedProduct) throws ProductNotFoundException {
         Optional<Product> searchedProduct = getProductById(id);
 
         if (searchedProduct.isEmpty()) {
             throw new ProductNotFoundException("Nie ma produktu, który chcesz updatowac");
         }
-        removeFromInventory(searchedProduct.get().getId());
-        addToInventory(updatedProduct);
+
+        searchedProduct.get().setPrice(updatedProduct.getPrice());
+        searchedProduct.get().setName(updatedProduct.getName());
+        searchedProduct.get().setConfigurations(updatedProduct.getConfigurations());
+        searchedProduct.get().setAvailableQuantity(updatedProduct.getAvailableQuantity());
+
     }
 }

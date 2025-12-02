@@ -17,7 +17,7 @@ public class Main {
         OrderManager orderManager = new OrderManager();
 
 
-        Client kamilClient = new Client("Kamil", "Nowak", 1);
+        Client kamilClient = new Client("Kamil", "Nowak", 1L);
         Cart kamilCart = new Cart();
         Order kamilOrder = new Order(kamilClient, kamilCart);
 

@@ -1,19 +1,20 @@
 package Manager;
 
-import Models.Cart.Cart;
 import Models.Order.Invoice;
 import Models.Order.Order;
 import Models.Product.Product;
 import MyException.EmptyCartException;
-import MyException.ProductNotFoundException;
 import Services.InvoicePersistence;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static java.util.Optional.ofNullable;
 
 public class OrderManager {
 
@@ -48,13 +49,11 @@ public class OrderManager {
         }
 
         Long id = getIdFromUser("\n\nwybierz id produktu ktory chcesz usunac z koszyka");
-        Product removedProduct = order.getCart().remove(id);
 
-        if (removedProduct != null) {
-            System.out.println("usuneles z koszyka product: " + removedProduct);
+        ofNullable(order.getCart().remove(id)).ifPresent(product -> {
+            System.out.println("usuneles z koszyka product: " + product);
             order.getCart().show();
-        }
-
+        });
 
     }
 
@@ -62,46 +61,31 @@ public class OrderManager {
         if (order.getCart().isEmpty()) {
             throw new EmptyCartException("Nie można wykonać zamówienia, koszyk jest pusty!");
         }
-        CompletableFuture<Boolean> canExecuteOrder = CompletableFuture.supplyAsync(()->{
-            List<Product> productsInCart = order.getCart().getProducts();
-            for (Product product : productsInCart) {
-                if (!product.isAvailable()) {
-                   return false;
-                }else {
-                    product.setAvailableQuantity(product.getAvailableQuantity()-1);
-                }
-            }
 
-            return true;
-        },executorService);
-
-        canExecuteOrder.thenAcceptAsync(canExecute -> {
-            if(!canExecute){
+        canExecuteOrder(order).thenAcceptAsync(canExecute -> {
+            if (!canExecute) {
                 System.out.println("Nie można wykonać zamówienia – produkt niedostępny!");
                 return;
             }
 
-            Invoice invoice = new Invoice(
-                    "FV/" + Math.random(),
-                    order.getClient(),
-                    order.getCart(),
-                    0.23
-            );
-
-            System.out.println("Faktura wygenerowana! ");
-            invoice.showInvoice();
-
-
-            try {
-                InvoicePersistence.saveInvoice(invoice, "invoices/invoices.txt");
-                System.out.println("Faktura zapisana do pliku invoices/invoices.txt");
-            } catch (IOException e) {
-                System.out.println("Błąd zapisu faktury: " + e.getMessage());
-            }
+            InvoiceManager.generateInvoice(order);
 
         });
+    }
 
+    private CompletableFuture<Boolean> canExecuteOrder(Order order) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Product> productsInCart = order.getCart().getProducts();
+            for (Product product : productsInCart) {
+                if (!product.isAvailable()) {
+                    return false;
+                } else {
+                    product.setAvailableQuantity(product.getAvailableQuantity() - 1);
+                }
+            }
 
+            return true;
+        }, executorService);
     }
 
     private boolean isEmptyCart(Order order) {

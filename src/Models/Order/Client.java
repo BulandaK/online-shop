@@ -5,9 +5,9 @@ import java.util.Objects;
 public class Client {
     private String name;
     private String surname;
-    private int id;
+    private Long id;
 
-    public Client(String name, String surname, int id) {
+    public Client(String name, String surname, Long id) {
         this.name = name;
         this.surname = surname;
         this.id = id;
@@ -21,7 +21,7 @@ public class Client {
         return surname;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -33,7 +33,7 @@ public class Client {
         this.surname = surname;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
