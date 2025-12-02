@@ -10,9 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import Services.Discount.DiscountStrategy;
+
+
 public class Cart {
     private final List<Product> products;
     private final ProductManager productManager;
+    private DiscountStrategy discountStrategy;
 
     public Cart() {
         products = new ArrayList<Product>();
@@ -21,8 +25,8 @@ public class Cart {
 
     public void add(Long id) {
 
-            Optional<Product> productToAdd = productManager.getProductById(id);
-        
+        Optional<Product> productToAdd = productManager.getProductById(id);
+
         productToAdd.ifPresentOrElse(
                 product -> {
                     if (product.getAvailableQuantity() > 0) {
@@ -36,25 +40,24 @@ public class Cart {
 
     }
 
-    public Product remove(Long id) {
-        Product removed = products.stream()
+    public Optional<Product> remove(Long id) {
+        Optional<Product> toRemove = products.stream()
                 .filter(product -> product.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
 
-        if (removed == null) {
-            return null;
-        }
-
-        products.remove(removed);
-        return removed;
+        toRemove.ifPresent(product -> products.remove(product));
+        return toRemove;
     }
 
     public void show() {
         System.out.println("koszyk uzytkownika:");
-        for (Product product : products) {
-            System.out.println(product);
-        }
+        products.forEach(System.out::println);
+
+        System.out.println("Suma (ew. po rabacie): " + sumPrices());
+    }
+
+    public void setDiscountStrategy(DiscountStrategy discountStrategy) {
+        this.discountStrategy = discountStrategy;
     }
 
     public Order makeOrder(Client client) {
@@ -62,19 +65,23 @@ public class Cart {
     }
 
     public BigDecimal sumPrices() {
-        return products.stream()
+        BigDecimal baseTotal = products.stream()
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (discountStrategy != null) {
+            return discountStrategy.applyDiscount(baseTotal);
+        }
+
+        return baseTotal;
     }
 
     public void finalizeCart() {
-        products.forEach(product -> {
-            product.setAvailableQuantity(product.getAvailableQuantity() - 1);
-        });
+        products.forEach(product -> product.setAvailableQuantity(product.getAvailableQuantity() - 1));
         products.clear();
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return products.isEmpty();
     }
 
