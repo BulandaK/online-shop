@@ -1,27 +1,33 @@
 package Models.Order;
 
 import Models.Cart.Cart;
+import Models.Product.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Invoice {
     private String number;
     private LocalDateTime issueDate;
     private Client client;
-    private Cart cart;
+    private List<Product> productsSnapshot;
+    private BigDecimal netAmount;
+
     private double vatRate;
 
     public Invoice(String number, Client client, Cart cart, double vatRate) {
         this.number = number;
         this.issueDate = LocalDateTime.now();
         this.client = client;
-        this.cart = cart;
         this.vatRate = vatRate;
+        this.productsSnapshot = new ArrayList<>(cart.getProducts());
+        this.netAmount = cart.sumPrices();
     }
 
     public BigDecimal getNetAmount() {
-        return cart.sumPrices();
+        return this.netAmount;
     }
 
     public double getVatAmount() {
@@ -44,8 +50,8 @@ public class Invoice {
         return client;
     }
 
-    public Cart getCart() {
-        return cart;
+    public List<Product> getProducts() {
+        return productsSnapshot;
     }
 
     public double getVatRate() {
@@ -58,7 +64,12 @@ public class Invoice {
         System.out.println("Date: " + issueDate);
         System.out.println("Customer: " + client);
         System.out.println("-----------------------------------");
-        cart.show();
+
+        System.out.println("Pozycje na fakturze:");
+        for (Product product : productsSnapshot) {
+            System.out.println(product);
+        }
+
         System.out.println("-----------------------------------");
         System.out.println("Net amount: " + getNetAmount());
         System.out.println("VAT (" + (vatRate * 100) + "%): " + getVatAmount());

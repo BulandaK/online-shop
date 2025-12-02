@@ -22,17 +22,17 @@ public class ConccurencyTest {
         System.out.println("Dostępność: " + mouse.getAvailableQuantity());
 
         Cart cart1 = new Cart();
-        cart1.add(1L);
+        cart1.addProduct(mouse);
         Client client1 = new Client("Jan", "jan@test.com", 1L);
         Order order1 = new Order(client1, cart1);
 
         Cart cart2 = new Cart();
-        cart2.add(1L);
+        cart2.addProduct(mouse);
         Client client2 = new Client("Anna", "anna@test.com", 2L);
         Order order2 = new Order(client2, cart2);
 
         Cart cart3 = new Cart();
-        cart3.add(1L);
+        cart3.addProduct(mouse);
         Client client3 = new Client("Piotr", "piotr@test.com", 3L);
         Order order3 = new Order(client3, cart3);
 

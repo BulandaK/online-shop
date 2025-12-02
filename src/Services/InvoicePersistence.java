@@ -1,6 +1,5 @@
 package Services;
 
-import Models.Cart.Cart;
 import Models.Order.Invoice;
 import Models.Product.Product;
 
@@ -26,8 +25,7 @@ public class InvoicePersistence {
         sb.append("Customer: ").append(invoice.getClient()).append("\n");
         sb.append("-----------------------------------\n");
 
-        Cart cart = invoice.getCart();
-        for (Product p : cart.getProducts()) {
+        for (Product p : invoice.getProducts()) {
             sb.append(p).append("\n");
         }
 

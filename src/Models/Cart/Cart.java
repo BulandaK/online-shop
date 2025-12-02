@@ -1,69 +1,44 @@
 package Models.Cart;
 
-import Manager.ProductManager;
 import Models.Order.Client;
 import Models.Order.Order;
 import Models.Product.Product;
+import Services.Discount.DiscountStrategy; // Jeśli zaimplementowałeś Task 12
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import Services.Discount.DiscountStrategy;
-
 
 public class Cart {
     private final List<Product> products;
-    private final ProductManager productManager;
-    private DiscountStrategy discountStrategy;
+    private DiscountStrategy discountStrategy; // Z Task 12
 
     public Cart() {
-        products = new ArrayList<Product>();
-        productManager = State.GlobalState.getProductManager();
+        this.products = new ArrayList<>();
     }
 
-    public void add(Long id) {
-
-        Optional<Product> productToAdd = productManager.getProductById(id);
-
-        productToAdd.ifPresentOrElse(
-                product -> {
-                    if (product.getAvailableQuantity() > 0) {
-                        products.add(product);
-                    } else {
-                        throw new MyException.InsufficientStockException("Brak dostępnych sztuk dla produktu id=" + id);
-                    }
-                },
-                () -> System.out.println("Nie mozna dodac do koszyka, taki produkt nie istnieje")
-        );
-
+    // Metody "techniczne" tylko do obsługi listy
+    public void addProduct(Product product) {
+        products.add(product);
     }
 
-    public Optional<Product> remove(Long id) {
-        Optional<Product> toRemove = products.stream()
-                .filter(product -> product.getId().equals(id))
-                .findFirst();
-
-        toRemove.ifPresent(product -> products.remove(product));
-        return toRemove;
+    public void removeProduct(Product product) {
+        products.remove(product);
     }
 
-    public void show() {
-        System.out.println("koszyk uzytkownika:");
-        products.forEach(System.out::println);
-
-        System.out.println("Suma (ew. po rabacie): " + sumPrices());
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setDiscountStrategy(DiscountStrategy discountStrategy) {
-        this.discountStrategy = discountStrategy;
+    public void clear() {
+        products.clear();
     }
 
-    public Order makeOrder(Client client) {
-        return new Order(client, this);
+    public boolean isEmpty() {
+        return products.isEmpty();
     }
 
+    // Tę metodę zostawiamy w modelu, bo oblicza stan wewnętrzny obiektu
     public BigDecimal sumPrices() {
         BigDecimal baseTotal = products.stream()
                 .map(Product::getPrice)
@@ -72,20 +47,15 @@ public class Cart {
         if (discountStrategy != null) {
             return discountStrategy.applyDiscount(baseTotal);
         }
-
         return baseTotal;
     }
 
-    public void finalizeCart() {
-        products.forEach(product -> product.setAvailableQuantity(product.getAvailableQuantity() - 1));
-        products.clear();
+    public void setDiscountStrategy(DiscountStrategy discountStrategy) {
+        this.discountStrategy = discountStrategy;
     }
 
-    public boolean isEmpty() {
-        return products.isEmpty();
-    }
-
-    public List<Product> getProducts() {
-        return products;
+    // Factory method może zostać lub można ją przenieść (zostawmy dla wygody)
+    public Order makeOrder(Client client) {
+        return new Order(client, this);
     }
 }
