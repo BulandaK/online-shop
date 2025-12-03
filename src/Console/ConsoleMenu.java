@@ -29,10 +29,11 @@ public class ConsoleMenu {
                 case ADD_TO_CART -> orderManager.addToCart(order);
                 case REMOVE_FROM_CART -> orderManager.removeFromCart(order);
                 case MAKE_ORDER -> orderManager.executeOrder(order);
-                case EXIT -> System.out.println("Wyjście z programu");
+                case EXIT -> orderManager.close();
             }
 
         } while (option != OrderOptions.EXIT);
+        System.out.println("Wyjście z programu");
     }
 
     private void showOptions() {
@@ -61,7 +62,5 @@ public class ConsoleMenu {
 
     private void helloUser() {
         System.out.println("witaj uzytkowniku: " + this.order.getClient().getName());
-
     }
-
 }

@@ -3,7 +3,7 @@ package Models.Cart;
 import Models.Order.Client;
 import Models.Order.Order;
 import Models.Product.Product;
-import Services.Discount.DiscountStrategy; // Jeśli zaimplementowałeś Task 12
+import Services.Discount.DiscountStrategy;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,13 +11,12 @@ import java.util.List;
 
 public class Cart {
     private final List<Product> products;
-    private DiscountStrategy discountStrategy; // Z Task 12
+    private DiscountStrategy discountStrategy;
 
     public Cart() {
         this.products = new ArrayList<>();
     }
 
-    // Metody "techniczne" tylko do obsługi listy
     public void addProduct(Product product) {
         products.add(product);
     }
@@ -38,7 +37,6 @@ public class Cart {
         return products.isEmpty();
     }
 
-    // Tę metodę zostawiamy w modelu, bo oblicza stan wewnętrzny obiektu
     public BigDecimal sumPrices() {
         BigDecimal baseTotal = products.stream()
                 .map(Product::getPrice)
@@ -54,7 +52,6 @@ public class Cart {
         this.discountStrategy = discountStrategy;
     }
 
-    // Factory method może zostać lub można ją przenieść (zostawmy dla wygody)
     public Order makeOrder(Client client) {
         return new Order(client, this);
     }

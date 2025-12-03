@@ -19,7 +19,8 @@ public class CartManager {
 
         productToAdd.ifPresentOrElse(
                 product -> {
-                    if (product.getAvailableQuantity() > 0) {
+                    if (product.getAvailableQuantity() > 0
+                            && alreadyInCart(product, cart) < product.getAvailableQuantity()) {
                         cart.addProduct(product);
                         System.out.println("Dodano produkt: " + product.getName());
                     } else {
@@ -53,11 +54,17 @@ public class CartManager {
         System.out.println("Suma: " + cart.sumPrices());
     }
 
-
     public void finalizeCart(Cart cart) {
         cart.getProducts().forEach(product -> {
             product.setAvailableQuantity(product.getAvailableQuantity() - 1);
         });
         cart.clear();
+    }
+
+    private int alreadyInCart(Product productInCart, Cart cart) {
+        return (int) cart.getProducts().stream()
+                .filter(product -> product.equals(productInCart))
+                .count();
+
     }
 }

@@ -16,13 +16,12 @@ public class Main {
         ProductManager productManager = State.GlobalState.getProductManager();
         OrderManager orderManager = new OrderManager();
 
-
         Client kamilClient = new Client("Kamil", "Nowak", 1L);
         Cart kamilCart = new Cart();
         Order kamilOrder = new Order(kamilClient, kamilCart);
 
         // tworzenie porduktow
-        Product laptop = new Product(1L, "Laptop X", new BigDecimal("3000.00"), 5);
+        Product laptop = new Product(1L, "Laptop X", new BigDecimal("3000.00"), 2);
         ProductConfiguration laptopConfiguration = laptop.makeProductAsConfiguration(1L);
 
         Product mouse = new Product(2L, "Wireless Mouse", new BigDecimal("100.00"), 5);
@@ -39,10 +38,8 @@ public class Main {
         productManager.addToInventory(mouse);
         productManager.addToInventory(laptopWithMouse);
 
-
         ConsoleMenu consoleMenu = new ConsoleMenu(orderManager, kamilOrder);
         consoleMenu.run();
-
 
     }
 
