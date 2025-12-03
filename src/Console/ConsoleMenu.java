@@ -56,6 +56,7 @@ public class ConsoleMenu {
                 case SHOW_PRODUCTS -> orderManager.showProducts();
                 case ADD_TO_CART -> orderManager.addToCart(order);
                 case REMOVE_FROM_CART -> orderManager.removeFromCart(order);
+                case ENTER_DISCOUNT_CODE -> orderManager.addDiscount(order);
                 case MAKE_ORDER -> orderManager.executeOrder(order);
                 case EXIT -> orderManager.close(); // Ensures background threads are stopped
             }

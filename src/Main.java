@@ -6,6 +6,8 @@ import Models.Order.Client;
 import Models.Order.Order;
 import Models.Product.Product;
 import Models.Product.ProductConfiguration;
+import Services.Discount.PercentageDiscount;
+import Services.Discount.ThresholdDiscount;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,6 +17,17 @@ public class Main {
 
         ProductManager productManager = State.GlobalState.getProductManager();
         OrderManager orderManager = new OrderManager();
+
+        // === DEFINIOWANIE RABATÓW ===
+        // 1. Rabat procentowy (np. 15% na hasło LATO15)
+        orderManager.registerDiscount("LATO15", new PercentageDiscount(0.15));
+
+        // 2. Rabat kwotowy (np. -50 PLN przy zakupach powyżej 200 PLN na hasło ZIMA50)
+        orderManager.registerDiscount("ZIMA50", new ThresholdDiscount("200.00", "50.00"));
+
+        // 3. Rabat VIP (np. 50% zniżki)
+        orderManager.registerDiscount("VIPSECRET", new PercentageDiscount(0.50));
+        // ============================
 
         Client kamilClient = new Client("Kamil", "Nowak", 1L);
         Cart kamilCart = new Cart();
@@ -42,5 +55,4 @@ public class Main {
         consoleMenu.run();
 
     }
-
 }

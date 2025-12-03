@@ -2,6 +2,7 @@ package Manager;
 
 import Models.Cart.Cart;
 import Models.Product.Product;
+import MyException.EmptyCartException;
 import MyException.InsufficientStockException;
 
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class CartManager {
         productToAdd.ifPresentOrElse(
                 product -> {
                     if (product.getAvailableQuantity() > 0
-                                    && alreadyInCart(product, cart) < product.getAvailableQuantity()
+                            && alreadyInCart(product, cart) < product.getAvailableQuantity()
                     ) {
                         cart.addProduct(product);
                         System.out.println("Dodano produkt: " + product.getName());
@@ -48,20 +49,20 @@ public class CartManager {
      *
      * @param cart The cart to remove the product from.
      * @param id   The unique identifier of the product.
-     * @return The removed {@link Product} object, or {@code null} if not found in cart.
+     * @return The optional of removed {@link Product} object.
      */
-    public Product removeByIdFromCart(Cart cart, Long id) {
-        Product removed = cart.getProducts().stream()
-                .filter(product -> product.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+    public Optional<Product> removeByIdFromCart(Cart cart, Long id) {
 
-        if (removed == null) {
+        Optional<Product> removed = cart.getProducts().stream()
+                .filter(product -> product.getId().equals(id))
+                .findFirst();
+
+        if (removed.isEmpty()) {
             System.out.println("Produkt o podanym ID nie znajduje się w koszyku.");
-            return null;
+            return Optional.empty();
         }
 
-        cart.removeProduct(removed);
+        cart.removeProduct(removed.get());
         return removed;
     }
 

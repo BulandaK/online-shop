@@ -27,7 +27,7 @@ public class InvoiceManager {
      * </p>
      *
      * @param order The completed {@link Order} for which the invoice is to be generated.
-     * Must contain a valid client and a non-empty cart (or snapshot).
+     *              Must contain a valid client and a non-empty cart (or snapshot).
      */
     public static void generateInvoice(Order order) {
         Invoice invoice = new Invoice(

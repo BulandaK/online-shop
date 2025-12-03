@@ -4,25 +4,28 @@ import Models.Order.Invoice;
 import Models.Order.Order;
 import Models.Product.Product;
 import MyException.EmptyCartException;
+import Services.Discount.DiscountStrategy;
 import Services.InvoicePersistence;
 import Services.PaymentService;
 import State.GlobalState;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Manages the entire lifecycle of an order execution.
+ * Manages the order processing workflow, including cart operations and order execution.
  * <p>
- * This class is responsible for coordinating inventory reservation, payment processing,
- * and invoice generation. It uses asynchronous processing to handle orders
- * without blocking the user interface.
+ * Now supports dynamic registration of discount codes.
  * </p>
  *
+ * @author OnlineShop Team
+ * @version 1.3
  */
 public class OrderManager {
 
@@ -30,17 +33,14 @@ public class OrderManager {
     private final CartManager cartManager;
     private final PaymentService paymentService;
     private final Scanner scanner = new Scanner(System.in);
-
-    /**
-     * Thread pool for processing orders asynchronously.
-     * Configured with 5 threads to handle multiple customers concurrently.
-     */
     private final ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     /**
-     * Initializes the OrderManager with dependencies.
-     * Gets the singleton instance of ProductManager.
+     * Registry storing valid discount codes and their corresponding strategies.
+     * Key: Discount Code (String), Value: Discount Strategy (Algorithm).
      */
+    private final Map<String, DiscountStrategy> discountRegistry = new HashMap<>();
+
     public OrderManager() {
         this.productManager = GlobalState.getProductManager();
         this.cartManager = new CartManager();
@@ -48,17 +48,19 @@ public class OrderManager {
     }
 
     /**
-     * Displays all available products in the inventory to the console.
+     * Registers a new discount code in the system.
+     *
+     * @param code     The code the user must type (e.g., "SUMMER2025").
+     * @param strategy The logic for the discount (e.g., new PercentageDiscount(0.10)).
      */
+    public void registerDiscount(String code, DiscountStrategy strategy) {
+        discountRegistry.put(code.toUpperCase(), strategy);
+    }
+
     public void showProducts() {
         productManager.showInventory();
     }
 
-    /**
-     * Prompts the user for a product ID and adds it to the current order's cart.
-     *
-     * @param order The current order object containing the cart.
-     */
     public void addToCart(Order order) {
         try {
             Long id = getIdFromUser("\n\nWybierz id produktu, który chcesz dodać do koszyka:");
@@ -69,12 +71,6 @@ public class OrderManager {
         }
     }
 
-    /**
-     * Prompts the user for a product ID and removes it from the current order's cart.
-     *
-     * @param order The current order object containing the cart.
-     * @throws EmptyCartException if the cart is already empty.
-     */
     public void removeFromCart(Order order) {
         if (order.getCart().isEmpty()) {
             throw new EmptyCartException("Nie można usunąć z koszyka - jest pusty!");
@@ -85,17 +81,26 @@ public class OrderManager {
     }
 
     /**
-     * Executes the order process asynchronously.
-     * <p>
-     * The process consists of three steps:
-     * <ol>
-     * <li><b>Reservation:</b> Checks stock availability and reserves products (synchronized).</li>
-     * <li><b>Payment:</b> Simulates payment processing (long-running task).</li>
-     * <li><b>Finalization:</b> Generates an invoice on success, or returns items to stock on failure (rollback).</li>
-     * </ol>
+     * Prompts the user to enter a discount code.
+     * Looks up the code in the registry and applies the strategy if found.
      *
-     * @param order The order to be executed.
+     * @param order The order to apply the discount to.
      */
+    public void addDiscount(Order order) {
+        System.out.println("\nPodaj kod rabatowy:");
+        String code = scanner.nextLine().trim().toUpperCase();
+
+        if (discountRegistry.containsKey(code)) {
+            DiscountStrategy strategy = discountRegistry.get(code);
+            order.getCart().setDiscountStrategy(strategy);
+
+            System.out.println("Kod " + code + " aktywny!");
+            System.out.println("Aktualna wartość koszyka: " + order.getCart().sumPrices());
+        } else {
+            System.out.println("Kod nieprawidłowy lub nieaktywny.");
+        }
+    }
+
     public void executeOrder(Order order) {
         if (order.getCart().isEmpty()) {
             System.out.println("Koszyk jest pusty. Nie można złożyć zamówienia.");
@@ -124,25 +129,13 @@ public class OrderManager {
                 }, executorService);
     }
 
-    /**
-     * Shuts down the executor service to allow the application to exit.
-     * Should be called when the application is closing.
-     */
     public void close() {
         System.out.println("Zamykanie puli wątków...");
         executorService.shutdown();
     }
 
-    /**
-     * Attempts to reserve stock for products in the cart.
-     * <p>
-     * This method is synchronized on {@code productManager} to prevent Race Conditions
-     * when multiple threads try to buy the same last item.
-     * </p>
-     *
-     * @param order The order containing products to reserve.
-     * @return {@code true} if reservation was successful, {@code false} if any product is unavailable.
-     */
+    // --- PRIVATE METHODS ---
+
     private boolean tryReserveStock(Order order) {
         synchronized (productManager) {
             System.out.println(" [LOGISTYKA] Sprawdzam dostępność i rezerwuję towar...");
@@ -163,11 +156,6 @@ public class OrderManager {
         }
     }
 
-    /**
-     * Handles successful order completion: generates invoice, saves it, and clears the cart.
-     *
-     * @param order The successfully paid order.
-     */
     private void handleOrderSuccess(Order order) {
         System.out.println(" [SKLEP] Płatność OK. Finalizuję zamówienie...");
 
@@ -190,11 +178,6 @@ public class OrderManager {
         }
     }
 
-    /**
-     * Handles order failure (Rollback): returns reserved items back to the inventory.
-     *
-     * @param order The failed order.
-     */
     private void handleOrderFailure(Order order) {
         System.out.println(" [SKLEP] Płatność odrzucona lub anulowana. Zwalniam rezerwację...");
 
@@ -213,7 +196,7 @@ public class OrderManager {
             scanner.next();
         }
         Long id = scanner.nextLong();
-        scanner.nextLine();
+        scanner.nextLine(); // consume newline
         return id;
     }
 }

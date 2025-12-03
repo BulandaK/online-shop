@@ -25,10 +25,10 @@ public class ProductConfiguration {
     /**
      * Constructs a full configuration with sub-products.
      *
-     * @param id                The unique identifier.
-     * @param name              The name of the configuration.
-     * @param price             The price of the configuration.
-     * @param product           The main product this configuration belongs to.
+     * @param id                 The unique identifier.
+     * @param name               The name of the configuration.
+     * @param price              The price of the configuration.
+     * @param product            The main product this configuration belongs to.
      * @param configuredProducts The list of component products.
      */
     public ProductConfiguration(Long id, String name, BigDecimal price, Product product, List<Product> configuredProducts) {

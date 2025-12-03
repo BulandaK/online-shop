@@ -5,19 +5,34 @@ package Enums;
  */
 public enum OrderOptions {
 
-    /** Show all available products in inventory. */
+    /**
+     * Show all available products in inventory.
+     */
     SHOW_PRODUCTS("Wyświetl produkty"),
 
-    /** Add a selected product to the cart. */
+    /**
+     * Add a selected product to the cart.
+     */
     ADD_TO_CART("Dodaj do koszyka"),
 
-    /** Remove a selected product from the cart. */
+    /**
+     * Remove a selected product from the cart.
+     */
     REMOVE_FROM_CART("Usuń z koszyka"),
 
-    /** Submit the current order for processing. */
+    /**
+     * Enter a discount code to apply reduction.
+     */
+    ENTER_DISCOUNT_CODE("Wpisz kod rabatowy"),
+
+    /**
+     * Submit the current order for processing.
+     */
     MAKE_ORDER("Złóż zamówienie"),
 
-    /** Exit the application. */
+    /**
+     * Exit the application.
+     */
     EXIT("WYjście");
 
     private final String description;
