@@ -2,11 +2,22 @@ package Models.Order;
 
 import java.util.Objects;
 
+/**
+ * Represents a client (customer) of the online shop.
+ * Contains personal information and a unique identifier.
+ */
 public class Client {
     private String name;
     private String surname;
     private Long id;
 
+    /**
+     * Constructs a new Client.
+     *
+     * @param name    The first name of the client.
+     * @param surname The last name of the client.
+     * @param id      The unique identifier for the client.
+     */
     public Client(String name, String surname, Long id) {
         this.name = name;
         this.surname = surname;

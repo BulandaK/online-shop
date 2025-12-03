@@ -4,13 +4,33 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a specific configuration of a product.
+ * <p>
+ * This is used for creating bundles or specific setups (e.g., a computer with specific components).
+ * It holds a reference to the main product and a list of sub-products.
+ * </p>
+ */
 public class ProductConfiguration {
     private Long id;
     private String name;
     private BigDecimal price;
     private Product product;
+
+    /**
+     * A list of sub-products that make up this configuration.
+     */
     private List<Product> configuredProducts;
 
+    /**
+     * Constructs a full configuration with sub-products.
+     *
+     * @param id                The unique identifier.
+     * @param name              The name of the configuration.
+     * @param price             The price of the configuration.
+     * @param product           The main product this configuration belongs to.
+     * @param configuredProducts The list of component products.
+     */
     public ProductConfiguration(Long id, String name, BigDecimal price, Product product, List<Product> configuredProducts) {
         this.id = id;
         this.name = name;
@@ -19,6 +39,14 @@ public class ProductConfiguration {
         this.configuredProducts = configuredProducts;
     }
 
+    /**
+     * Constructs a basic configuration without sub-products initially.
+     *
+     * @param id      The unique identifier.
+     * @param name    The name of the configuration.
+     * @param price   The price of the configuration.
+     * @param product The main product this configuration belongs to.
+     */
     public ProductConfiguration(Long id, String name, BigDecimal price, Product product) {
         this.id = id;
         this.name = name;
@@ -66,6 +94,9 @@ public class ProductConfiguration {
         this.configuredProducts = configuredProducts;
     }
 
+    /**
+     * Displays the configuration details and its components to the console.
+     */
     public void showConfiguration() {
         System.out.println("konfiugracja " + this);
         for (Product product : configuredProducts) {
